@@ -1,4 +1,4 @@
-<?php
+<?hh
 /*
 yourTwapperKeeper - Twitter Archiving Application - http://your.twapperkeeper.com
 Copyright (c) 2010 John O'Brien III - http://www.linkedin.com/in/jobrieniii
@@ -27,10 +27,8 @@ $_SESSION=array();
 session_destroy();
 
 // Restart session
-session_start(); 
+session_start();
 $_SESSION['notice'] = $notice;
 
 // Redirect back to index
 header('Location: ./index.php');
-
-?>

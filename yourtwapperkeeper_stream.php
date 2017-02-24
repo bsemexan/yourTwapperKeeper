@@ -1,4 +1,4 @@
-<?php
+<?hh // decl
 require_once('Phirehose.php');
 require_once('OauthPhirehose.php');
 require_once('config.php');
@@ -17,7 +17,7 @@ class DynamicTrackConsumer extends OauthPhirehose
     $status = get_object_vars($status);
     
    
-    if ($status['id'] <> null) {
+    if ($status['id'] != null) {
         
         $values_array = array();
        

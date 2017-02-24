@@ -31,9 +31,9 @@ if ($archiveInfo['count'] <> 1 || (!(isset($_GET['id'])))) {
 	$_SESSION['notice'] = "Archive does not exist.";
 	header('Location: index.php');
 	}
-	
+
 // setup perm urls
-$permurl= $tk_your_url."archive.php?".htmlentities($_SERVER['QUERY_STRING']); 
+$permurl= $tk_your_url."archive.php?".htmlentities($_SERVER['QUERY_STRING']);
 $permrss = $tk_your_url."rss.php?".htmlentities($_SERVER['QUERY_STRING']);
 $permexcel = $tk_your_url."excel.php?".htmlentities($_SERVER['QUERY_STRING']);
 $permtable = $tk_your_url."table.php?".htmlentities($_SERVER['QUERY_STRING']);
@@ -41,14 +41,14 @@ $permjson = $tk_your_url."apiGetTweets.php?".htmlentities($_SERVER['QUERY_STRING
 
 // set default limit
 if ($_GET['l'] == '') {$limit = 10;} else {$limit = $_GET['l'];}
-if ($_GET['o'] == '') {$orderby = 'd';} else {$orderby = $_GET['o'];} 
+if ($_GET['o'] == '') {$orderby = 'd';} else {$orderby = $_GET['o'];}
 
 // set time limit(s)
 if ($_GET['sm'] <> '' && $_GET['sd'] <> '' && $_GET['sy'] <> '') {
     $start_time = strtotime($_GET['sm']."/".$_GET['sd']."/".$_GET['sy']);}
 if ($_GET['em'] <> '' && $_GET['ed'] <> '' && $_GET['ey'] <> '') {
     $end_time = strtotime($_GET['em']."/".$_GET['ed']."/".$_GET['ey']);}
-    
+
 // Get tweets
 if ($start_time <> '' || $end_time <> '') {
 $archiveTweets = $tk->getTweets($_GET['id'],$start_time,$end_time,$limit,$orderby,$_GET['nort'],$_GET['from_user'],$_GET['text'],$_GET['lang'],$_GET['max_id'],$_GET['since_id'],$_GET['offset'],$_GET['lat'],$_GET['long'],$_GET['rad'],$_GET['debug']);
@@ -59,7 +59,7 @@ $archiveTweets = $tk->getTweets($_GET['id'],null,null,$limit,$orderby,$_GET['nor
 
 // OAuth login check
 if (empty($_SESSION['access_token']) || empty($_SESSION['access_token']['oauth_token']) || empty($_SESSION['access_token']['oauth_token_secret'])) {
-$login_status = "<a href='./oauthlogin.php' ><img src='./resources/lighter.png'/></a>";  
+$login_status = "<a href='./oauthlogin.php' ><img src='./resources/lighter.png'/></a>";
 $logged_in = FALSE;
 } else {
 $access_token = $_SESSION['access_token'];
@@ -88,7 +88,7 @@ $logged_in = TRUE;
 <body>
 
 <div id='login'>
-<?php echo $login_status; ?> 
+<?php echo $login_status; ?>
 
 <p><a href='index.php'><img src='resources/yourTwapperKeeperLogo.png'/></a></p>
 </div> <!-- end login div -->
@@ -103,7 +103,7 @@ $logged_in = TRUE;
 
 	<?php
 	 unset($_SESSION['notice']);
-	 }?> 
+	 }?>
 
 <h1><?php echo $archiveInfo['results'][0]['keyword']; ?> - <?php echo $archiveInfo['results'][0]['description']; ?></h1>
 <h2>Created on <?php echo date(DATE_RFC2822,$archiveInfo['results'][0]['create_time']); ?> and total number of tweets = <?php echo $archiveInfo['results'][0]['count']; ?></h2>
@@ -112,7 +112,7 @@ $logged_in = TRUE;
 <?php
 // filter form
 $month_num = array(1,2,3,4,5,6,7,8,9,10,11,12);
-$month_verbose = array('January','February','March','April','May','June','July','August','September','October','November','December');  
+$month_verbose = array('January','February','March','April','May','June','July','August','September','October','November','December');
 $day = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31);
 $year = array('2009','2010','2011','2012','2013');
 $order_values = array('ascending'=>'a','descending'=>'d');
@@ -328,7 +328,7 @@ foreach ($month_num as $value) {
     echo ">".$month_verbose[$value-1];
 }
 ?>
-</SELECT>                                                  
+</SELECT>
 </td>
 
 <td>
@@ -345,7 +345,7 @@ foreach ($day as $value) {
 </SELECT>
 </td>
 
-<td>                                                                                                                
+<td>
 <SELECT NAME="sy">
 <OPTION value=''>
 <?php
@@ -459,12 +459,12 @@ foreach ($languageCodes as $key=>$value) {
 </tr>
 </table>
 
-<br><input type='submit' value='query'/>  
+<br><input type='submit' value='query'/>
 
 </form>
 <br><br>
-<?php 
-          
+<?php
+
 echo "HTML Permalink = <a href='$permurl'>$permurl</a><br>";
 echo "RSS Permalink = <a href='$permrss'>$permrss</a><br>";
 echo "Excel Permalink = <a href='$permexcel'>$permexcel</a><br>";
@@ -482,9 +482,9 @@ echo "</h5>";
 
 <div style='text-align:left; margin-left:auto; margin-right:auto; width:1024px; padding-top:15px; padding-bottom:15px'>
 
-<?php        
+<?php
 		$tw_count = 0;
-        
+
         foreach ($archiveTweets as $row) {
             $tw_count = $tw_count + 1;
             echo "<div style='margin-bottom:5px'>";
@@ -495,16 +495,16 @@ echo "</h5>";
             preg_match('@(http://([\w-.]+)+(:\d+)?(/([\w/_.]*(\?\S+)?)?)?)@',$row['text'],$matches);
             $text = preg_replace("/#(\w+)/", "<a href=\"http://search.twitter.com/search?q=\\1\" target=\"_blank\">#\\1</a>", $text);
 
-            
+
             preg_replace('#','<a href="http://search.twitter.com/q=$1">.$1."</a>');
             echo "<b>@".$row['from_user']."</b> ".$text."<br><br>";
             echo "<font style='font-weight:lighter; font-size:8px'><i>".$row['created_at']." - tweet id <a name='tweetid-".$row['id']."'>".$row['id']."</a> - #$tw_count</i></font>";
-            echo "<br>";  
+            echo "<br>";
             if ($row['geo_type'] <> '') {
                 echo "<font style='font-weight:lighter; font-size:8px'><i>geo info: ".$row['geo_type']." - lat = ".$row['geo_coordinates_0']." - long = ".$row['geo_coordinates_1']."</i></font><br>";}
-             
-            
-            echo "</div>";                                        
+
+
+            echo "</div>";
             echo "</div>";
             echo "<div style='clear:both; margin-bottom:10px; margin-top:10px; border-bottom:1px dotted #333333'><br></div>";
         }

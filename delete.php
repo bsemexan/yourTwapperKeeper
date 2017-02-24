@@ -1,4 +1,4 @@
-<?php
+<?hh
 /*
 yourTwapperKeeper - Twitter Archiving Application - http://your.twapperkeeper.com
 Copyright (c) 2010 John O'Brien III - http://www.linkedin.com/in/jobrieniii
@@ -24,26 +24,24 @@ $id = $_POST['id'];
 session_start();
 require_once('config.php');
 require_once('function.php');
-require_once('twitteroauth.php'); 
+require_once('twitteroauth.php');
 
 // validate information before creating
 if (!(isset($_SESSION['access_token']['screen_name']))) {
 	$_SESSION['notice'] = 'You must login to delete an archive.';
 	header('Location: index.php');
-	die;
+	die(0);
 	}
 
 // validate user is the creator before deleting
 $archive = $tk->listArchive($id);
-if ($archive['results'][0]['user_id'] <> $_SESSION['access_token']['user_id']) {
+if ($archive['results'][0]['user_id'] != $_SESSION['access_token']['user_id']) {
 	$_SESSION['notice'] = 'You did not create this archive, therefore, you cannot delete it.';
 	header('Location: index.php');
-	die;
+	die(0);
 	}
 
 // create and redirect
 $result = $tk->deleteArchive($id);
 $_SESSION['notice'] = $result[0];
 header('Location: index.php');
-
-?>

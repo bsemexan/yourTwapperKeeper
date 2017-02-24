@@ -1,4 +1,4 @@
-<?php
+<?hh
 /*
 yourTwapperKeeper - Twitter Archiving Application - http://your.twapperkeeper.com
 Copyright (c) 2010 John O'Brien III - http://www.linkedin.com/in/jobrieniii
@@ -41,7 +41,7 @@ if (isset($auth_screen_name)) {
 		{
 			$_SESSION['notice'] = 'Twitter screen name '.$access_token['screen_name'].' is not authorized to use YourTwapperKeeper.';
   			header('Location: ./clearsessions.php?notice=Twitter screen name is not authorized to use YourTwapperKeeper.');
-  			die;
+  			die(0);
 		}
 	} 
 

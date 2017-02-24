@@ -1,4 +1,4 @@
-<?php
+<?hh
 /*
 yourTwapperKeeper - Twitter Archiving Application - http://your.twapperkeeper.com
 Copyright (c) 2010 John O'Brien III - http://www.linkedin.com/in/jobrieniii
@@ -29,27 +29,27 @@ require_once('twitteroauth.php');
 $id = $_GET['id'];
 
 $archiveInfo = $tk->listArchive($id);
-if ($archiveInfo['count'] <> 1 || (!(isset($_GET['id'])))) {
+if ($archiveInfo['count'] != 1 || (!(isset($_GET['id'])))) {
 	$response = array();
 	$response['response'] = 'bad archive id';
 	echo json_encode($response);
-	die;
+	die(0);
 }
 
 $response['archive_info'] = $archiveInfo['results'][0];
-    
+
 // set default limit
 if ($_GET['l'] == '') {$limit = 10;} else {$limit = $_GET['l'];}
-if ($_GET['o'] == '') {$orderby = 'd';} else {$orderby = $_GET['o'];} 
+if ($_GET['o'] == '') {$orderby = 'd';} else {$orderby = $_GET['o'];}
 
 // set times
-if ($_GET['sm'] <> '' && $_GET['sd'] <> '' && $_GET['sy'] <> '') {
+if ($_GET['sm'] != '' && $_GET['sd'] != '' && $_GET['sy'] != '') {
     $start_time = strtotime($_GET['sm']."/".$_GET['sd']."/".$_GET['sy']);}
-if ($_GET['em'] <> '' && $_GET['ed'] <> '' && $_GET['ey'] <> '') {
+if ($_GET['em'] != '' && $_GET['ed'] != '' && $_GET['ey'] != '') {
     $end_time = strtotime($_GET['em']."/".$_GET['ed']."/".$_GET['ey']);}
-    
+
 // Get tweets
-if ($start_time <> '' || $end_time <> '') {
+if ($start_time != '' || $end_time != '') {
 $archiveTweets = $tk->getTweets($_GET['id'],$start_time,$end_time,$limit,$orderby,$_GET['nort'],$_GET['from_user'],$_GET['text'],$_GET['lang'],$_GET['max_id'],$_GET['since_id'],$_GET['offset'],$_GET['lat'],$_GET['long'],$_GET['rad'],$_GET['debug']);
 } else {
 $archiveTweets = $tk->getTweets($_GET['id'],null,null,$limit,$orderby,$_GET['nort'],$_GET['from_user'],$_GET['text'],$_GET['lang'],$_GET['max_id'],$_GET['since_id'],$_GET['offset'],$_GET['lat'],$_GET['long'],$_GET['rad'],$_GET['debug']);
@@ -67,5 +67,3 @@ foreach ($archiveTweets as $tweet_count=>$tweet) {
 		}
 
 echo json_encode($response);
-
-?>

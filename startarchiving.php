@@ -1,4 +1,4 @@
-<?php
+<?hh
 /*
 yourTwapperKeeper - Twitter Archiving Application - http://your.twapperkeeper.com
 Copyright (c) 2010 John O'Brien III - http://www.linkedin.com/in/jobrieniii
@@ -28,9 +28,9 @@ require_once('twitteroauth.php');
 if (!(in_array($_SESSION['access_token']['screen_name'],$admin_screen_name))) {
 $_SESSION['notice'] = "Only administrators are allowed to stop / start archiving processes";
 header('Location:index.php');
-die;
+die(0);
 }
- 
+
 // List of archiving scripts
 $cmd = $archive_process_array;
 
@@ -52,4 +52,3 @@ $pids = substr($pids, 0, -1);
 
 $_SESSION['notice'] = "Twitter archiving processes have been started. (PIDs = $pids)";
 header('Location:index.php');
-?>

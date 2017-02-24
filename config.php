@@ -26,7 +26,7 @@ $tk_your_dir = "/var/www/html/";  															// make sure to include the tra
 $youtwapperkeeper_useragent = "Your TwapperKeeper";											// change to whatever you want!
 
 /* Administrators - Twitter screen name(s) who can administer / start / stop archiving */
-$admin_screen_name=array('your_twitter_name'); 
+$admin_screen_name=array('your_twitter_name');
 
 /* Users - Twitter screen names that are allowed to use Your Twapper Keeper site - leaving commented means anyone can use site*/
 /* $auth_screen_name=array('JohnSmith','SallySue'); */
@@ -34,16 +34,16 @@ $admin_screen_name=array('your_twitter_name');
 
 
 /* Your Twapper Keeper Twitter Account Information used to query for tweets (this is common for the site) */
-$tk_twitter_username = 'TWITTER_USERNAME';               
+$tk_twitter_username = 'TWITTER_USERNAME';
 $tk_twitter_password = 'TWITTER_PASSWORD';
 $tk_oauth_token = 'TOKEN';
-$tk_oauth_token_secret = 'SECRET'; 
+$tk_oauth_token_secret = 'SECRET';
 
 /* Your Twapper Keeper Application Information - setup at http://dev.twitter.com/apps and copy in consumer key and secret */
 $tk_oauth_consumer_key = 'KEY';
 $tk_oauth_consumer_secret = 'SECRET';
 
-/* MySQL Database Connection Information */                                             
+/* MySQL Database Connection Information */
 define("DB_SERVER", "localhost");										// change to your hostname
 define("DB_USER", "yourdbusername");									// change to your db username
 define("DB_PASS", "TBD");												// change to your db password
@@ -59,7 +59,7 @@ ini_set("memory_limit",$php_mem_limit);
 
 class MySQLDB
 {
-   var $connection;      
+   var $connection;
 
  function MySQLDB(){
       $this->connection = mysql_connect(DB_SERVER, DB_USER, DB_PASS) or die(mysql_error());
@@ -68,5 +68,3 @@ class MySQLDB
 
 }
 $db = new MySQLDB;
-
-?>

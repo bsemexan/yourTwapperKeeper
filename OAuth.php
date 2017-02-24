@@ -1,4 +1,4 @@
-<?php
+<?hh // decl
 // vim: foldmethod=marker
 
 /* Generic exception class
@@ -11,13 +11,13 @@ class OAuthConsumer {
   public $key;
   public $secret;
 
-  function __construct($key, $secret, $callback_url=NULL) {
+  public function __construct($key, $secret, $callback_url=NULL) {
     $this->key = $key;
     $this->secret = $secret;
     $this->callback_url = $callback_url;
   }
 
-  function __toString() {
+  public function __toString() {
     return "OAuthConsumer[key=$this->key,secret=$this->secret]";
   }
 }
@@ -31,7 +31,7 @@ class OAuthToken {
    * key = the token
    * secret = the token secret
    */
-  function __construct($key, $secret) {
+  public function __construct($key, $secret) {
     $this->key = $key;
     $this->secret = $secret;
   }
@@ -40,14 +40,14 @@ class OAuthToken {
    * generates the basic string serialization of a token that a server
    * would respond to request_token and access_token calls with
    */
-  function to_string() {
+  public function to_string() {
     return "oauth_token=" .
            OAuthUtil::urlencode_rfc3986($this->key) .
            "&oauth_token_secret=" .
            OAuthUtil::urlencode_rfc3986($this->secret);
   }
 
-  function __toString() {
+  public function __toString() {
     return $this->to_string();
   }
 }
@@ -90,14 +90,14 @@ abstract class OAuthSignatureMethod {
 }
 
 /**
- * The HMAC-SHA1 signature method uses the HMAC-SHA1 signature algorithm as defined in [RFC2104] 
- * where the Signature Base String is the text and the key is the concatenated values (each first 
- * encoded per Parameter Encoding) of the Consumer Secret and Token Secret, separated by an '&' 
+ * The HMAC-SHA1 signature method uses the HMAC-SHA1 signature algorithm as defined in [RFC2104]
+ * where the Signature Base String is the text and the key is the concatenated values (each first
+ * encoded per Parameter Encoding) of the Consumer Secret and Token Secret, separated by an '&'
  * character (ASCII code 38) even if empty.
  *   - Chapter 9.2 ("HMAC-SHA1")
  */
 class OAuthSignatureMethod_HMAC_SHA1 extends OAuthSignatureMethod {
-  function get_name() {
+  public function get_name() {
     return "HMAC-SHA1";
   }
 
@@ -118,7 +118,7 @@ class OAuthSignatureMethod_HMAC_SHA1 extends OAuthSignatureMethod {
 }
 
 /**
- * The PLAINTEXT method does not provide any security protection and SHOULD only be used 
+ * The PLAINTEXT method does not provide any security protection and SHOULD only be used
  * over a secure channel such as HTTPS. It does not use the Signature Base String.
  *   - Chapter 9.4 ("PLAINTEXT")
  */
@@ -128,8 +128,8 @@ class OAuthSignatureMethod_PLAINTEXT extends OAuthSignatureMethod {
   }
 
   /**
-   * oauth_signature is set to the concatenated encoded values of the Consumer Secret and 
-   * Token Secret, separated by a '&' character (ASCII code 38), even if either secret is 
+   * oauth_signature is set to the concatenated encoded values of the Consumer Secret and
+   * Token Secret, separated by a '&' character (ASCII code 38), even if either secret is
    * empty. The result MUST be encoded again.
    *   - Chapter 9.4.1 ("Generating Signatures")
    *
@@ -151,10 +151,10 @@ class OAuthSignatureMethod_PLAINTEXT extends OAuthSignatureMethod {
 }
 
 /**
- * The RSA-SHA1 signature method uses the RSASSA-PKCS1-v1_5 signature algorithm as defined in 
- * [RFC3447] section 8.2 (more simply known as PKCS#1), using SHA-1 as the hash function for 
- * EMSA-PKCS1-v1_5. It is assumed that the Consumer has provided its RSA public key in a 
- * verified way to the Service Provider, in a manner which is beyond the scope of this 
+ * The RSA-SHA1 signature method uses the RSASSA-PKCS1-v1_5 signature algorithm as defined in
+ * [RFC3447] section 8.2 (more simply known as PKCS#1), using SHA-1 as the hash function for
+ * EMSA-PKCS1-v1_5. It is assumed that the Consumer has provided its RSA public key in a
+ * verified way to the Service Provider, in a manner which is beyond the scope of this
  * specification.
  *   - Chapter 9.3 ("RSA-SHA1")
  */
@@ -226,8 +226,8 @@ class OAuthRequest {
   public static $version = '1.0';
   public static $POST_INPUT = 'php://input';
 
-  function __construct($http_method, $http_url, $parameters=NULL) {
-    @$parameters or $parameters = array();
+  public function __construct($http_method, $http_url, $parameters=NULL) {
+    @$parameters || ($parameters = array());
     $parameters = array_merge( OAuthUtil::parse_parameters(parse_url($http_url, PHP_URL_QUERY)), $parameters);
     $this->parameters = $parameters;
     $this->http_method = $http_method;
@@ -242,12 +242,12 @@ class OAuthRequest {
     $scheme = (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != "on")
               ? 'http'
               : 'https';
-    @$http_url or $http_url = $scheme .
+    @$http_url || ($http_url = $scheme .
                               '://' . $_SERVER['HTTP_HOST'] .
                               ':' .
                               $_SERVER['SERVER_PORT'] .
-                              $_SERVER['REQUEST_URI'];
-    @$http_method or $http_method = $_SERVER['REQUEST_METHOD'];
+                              $_SERVER['REQUEST_URI']);
+    @$http_method || ($http_method = $_SERVER['REQUEST_METHOD']);
 
     // We weren't handed any parameters, so let's find the ones relevant to
     // this request.
@@ -290,7 +290,7 @@ class OAuthRequest {
    * pretty much a helper function to set up the request
    */
   public static function from_consumer_and_token($consumer, $token, $http_method, $http_url, $parameters=NULL) {
-    @$parameters or $parameters = array();
+    @$parameters || ($parameters = array());
     $defaults = array("oauth_version" => OAuthRequest::$version,
                       "oauth_nonce" => OAuthRequest::generate_nonce(),
                       "oauth_timestamp" => OAuthRequest::generate_timestamp(),
@@ -385,7 +385,7 @@ class OAuthRequest {
     $host = $parts['host'];
     $path = @$parts['path'];
 
-    $port or $port = ($scheme == 'https') ? '443' : '80';
+    $port || ($port = ($scheme == 'https') ? '443' : '80');
 
     if (($scheme == 'https' && $port != '443')
         || ($scheme == 'http' && $port != '80')) {
@@ -485,7 +485,7 @@ class OAuthServer {
 
   protected $data_store;
 
-  function __construct($data_store) {
+  public function __construct($data_store) {
     $this->data_store = $data_store;
   }
 
@@ -556,7 +556,7 @@ class OAuthServer {
   private function get_version(&$request) {
     $version = $request->get_parameter("oauth_version");
     if (!$version) {
-      // Service Providers MUST assume the protocol version to be 1.0 if this parameter is not present. 
+      // Service Providers MUST assume the protocol version to be 1.0 if this parameter is not present.
       // Chapter 7.0 ("Accessing Protected Ressources")
       $version = '1.0';
     }
@@ -656,7 +656,7 @@ class OAuthServer {
       throw new OAuthException(
         'Missing timestamp parameter. The parameter is required'
       );
-    
+
     // verify that timestamp is recentish
     $now = time();
     if (abs($now - $timestamp) > $this->timestamp_threshold) {
@@ -690,23 +690,23 @@ class OAuthServer {
 }
 
 class OAuthDataStore {
-  function lookup_consumer($consumer_key) {
+  public function lookup_consumer($consumer_key) {
     // implement me
   }
 
-  function lookup_token($consumer, $token_type, $token) {
+  public function lookup_token($consumer, $token_type, $token) {
     // implement me
   }
 
-  function lookup_nonce($consumer, $token, $nonce, $timestamp) {
+  public function lookup_nonce($consumer, $token, $nonce, $timestamp) {
     // implement me
   }
 
-  function new_request_token($consumer, $callback = null) {
+  public function new_request_token($consumer, $callback = null) {
     // return a new token attached to this consumer
   }
 
-  function new_access_token($token, $consumer, $verifier = null) {
+  public function new_access_token($token, $consumer, $verifier = null) {
     // return a new access token attached to this consumer
     // for the user associated with this token if the request token
     // is authorized
@@ -774,7 +774,7 @@ class OAuthUtil {
       // returns the headers in the same case as they are in the
       // request
       $out = array();
-      foreach( $headers AS $key => $value ) {
+      foreach( $headers as $key => $value ) {
         $key = str_replace(
             " ",
             "-",
@@ -870,5 +870,3 @@ class OAuthUtil {
     return implode('&', $pairs);
   }
 }
-
-?>

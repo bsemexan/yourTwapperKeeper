@@ -1,4 +1,4 @@
-<?php
+<?hh // decl
 /**
  * A class that makes it easy to connect to and consume the Twitter stream via the Streaming API.
  *
@@ -28,20 +28,20 @@ abstract class Phirehose
   /**
    * Member Attribs
    */
-  protected $username;
-  protected $password;
-  protected $method;
-  protected $format;
-  protected $count; //Can be -150,000 to 150,000. @see http://dev.twitter.com/pages/streaming_api_methods#count
-  protected $followIds;
-  protected $trackWords;
-  protected $locationBoxes;
-  protected $conn;
-  protected $fdrPool;
-  protected $buff;
+  protected _ $username;
+  protected _ $password;
+  protected _ $method;
+  protected _ $format;
+  protected _ $count; //Can be -150,000 to 150,000. @see http://dev.twitter.com/pages/streaming_api_methods#count
+  protected _ $followIds;
+  protected _ $trackWords;
+  protected _ $locationBoxes;
+  protected _ $conn;
+  protected _ $fdrPool;
+  protected _ $buff;
   // State vars
-  protected $filterChanged;
-  protected $reconnect;
+  protected _ $filterChanged;
+  protected _ $reconnect;
 
   /**
   * The number of tweets received per second in previous minute; calculated fresh
@@ -51,10 +51,10 @@ abstract class Phirehose
   *
   * @var integer
   */
-  protected $statusRate;
+  protected _ $statusRate;
 
-  protected $lastErrorNo;
-  protected $lastErrorMsg;
+  protected _ $lastErrorNo;
+  protected _ $lastErrorMsg;
 
   /**
   * Number of tweets received.
@@ -65,7 +65,7 @@ abstract class Phirehose
   *
   * @var integer
   */
-  protected $statusCount=0;
+  protected int $statusCount=0;
 
   /**
   * The number of calls to $this->checkFilterPredicates().
@@ -75,7 +75,7 @@ abstract class Phirehose
   *
   * @var integer
   */
-  protected $filterCheckCount=0;
+  protected int $filterCheckCount=0;
 
   /**
   * Total number of seconds (fractional) spent in the enqueueStatus() calls (i.e. the customized
@@ -83,28 +83,28 @@ abstract class Phirehose
   *
   * @var float
   */
-  protected $enqueueSpent=0;
+  protected int $enqueueSpent=0;
 
   /**
   * Total number of seconds (fractional) spent in the checkFilterPredicates() calls
   *
   * @var float
   */
-  protected $filterCheckSpent=0;
+  protected int $filterCheckSpent=0;
 
   /**
   * Number of seconds since the last tweet arrived (or the keep-alive newline)
   *
   * @var integer
   */
-  protected $idlePeriod=0;
+  protected int $idlePeriod=0;
 
   /**
   * The maximum value $this->idlePeriod has reached.
   *
   * @var integer
   */
-  protected $maxIdlePeriod=0;
+  protected int $maxIdlePeriod=0;
 
   /**
   * Time spent on each call to enqueueStatus() (i.e. average time spent, in milliseconds,
@@ -115,13 +115,13 @@ abstract class Phirehose
   *
   * @var float
   */
-  protected $enqueueTimeMS=0;
+  protected int $enqueueTimeMS=0;
 
   /**
   * Like $enqueueTimeMS but for the checkFilterPredicates() function.
   * @var float
   */
-  protected $filterCheckTimeMS=0;
+  protected int $filterCheckTimeMS=0;
 
   /**
   * Seconds since the last call to statusUpdate()
@@ -131,22 +131,22 @@ abstract class Phirehose
   *
   * @var integer
   */
-  protected $avgElapsed=0;
+  protected int $avgElapsed=0;
 
   // Config type vars - override in subclass if desired
-  protected $connectFailuresMax = 20;
-  protected $connectTimeout = 5;
-  protected $readTimeout = 5;
-  protected $idleReconnectTimeout = 90;
-  protected $avgPeriod = 60;
-  protected $status_length_base = 10;
-  protected $userAgent       = 'Phirehose/0.2.gitmaster +https://github.com/fennb/phirehose';
-  protected $filterCheckMin = 5;
-  protected $filterUpdMin   = 120;
-  protected $tcpBackoff      = 1;
-  protected $tcpBackoffMax  = 16;
-  protected $httpBackoff  = 10;
-  protected $httpBackoffMax  = 240;
+  protected int $connectFailuresMax = 20;
+  protected int $connectTimeout = 5;
+  protected int $readTimeout = 5;
+  protected int $idleReconnectTimeout = 90;
+  protected int $avgPeriod = 60;
+  protected int $status_length_base = 10;
+  protected string $userAgent       = 'Phirehose/0.2.gitmaster +https://github.com/fennb/phirehose';
+  protected int $filterCheckMin = 5;
+  protected int $filterUpdMin   = 120;
+  protected int $tcpBackoff      = 1;
+  protected int $tcpBackoffMax  = 16;
+  protected int $httpBackoff  = 10;
+  protected int $httpBackoffMax  = 240;
   
   /**
    * Create a new Phirehose object attached to the appropriate twitter stream method.
@@ -160,7 +160,7 @@ abstract class Phirehose
    * @param string $method
    * @param string $format
    */
-  public function __construct($username, $password, $method = Phirehose::METHOD_SAMPLE, $format = self::FORMAT_JSON)
+  public function __construct($username, $password, @string $method = Phirehose::METHOD_SAMPLE, @string $format = self::FORMAT_JSON)
   {
     $this->username = $username;
     $this->password = $password;
@@ -353,7 +353,7 @@ abstract class Phirehose
    * @param boolean $reconnect Reconnects as per recommended
    * @throws ErrorException
    */
-  public function consume($reconnect = TRUE)
+  public function consume(@bool $reconnect = TRUE)
   {
     // Persist connection?
     $this->reconnect = $reconnect;
@@ -541,7 +541,7 @@ abstract class Phirehose
       if ($this->method == self::METHOD_FILTER && count($this->locationBoxes) > 0) {
         $requestParams['locations'] = implode(',', $this->locationBoxes);
       }
-      if ($this->count <> 0) {
+      if ($this->count != 0) {
         $requestParams['count'] = $this->count;    
       }
   
@@ -731,7 +731,7 @@ abstract class Phirehose
    *     'error' is for exceptional conditions that may need human intervention. (For instance, emailing
    *          them to a system administrator may make sense.)
    */
-  protected function log($message,$level='notice')
+  protected function log($message,@string $level='notice')
   {
     @error_log('Phirehose: ' . $message, 0);
   }

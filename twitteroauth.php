@@ -1,4 +1,4 @@
-<?php
+<?hh // decl
 
 /*
  * Abraham Williams (abraham@abrah.am) http://abrah.am
@@ -14,25 +14,25 @@ require_once('OAuth.php');
  */
 class TwitterOAuth {
   /* Contains the last HTTP status code returned. */
-  public $http_code;
+  public _ $http_code;
   /* Contains the last API call. */
-  public $url;
+  public _ $url;
   /* Set up the API root URL. */
-  public $host = "https://api.twitter.com/1.1/";
+  public string $host = "https://api.twitter.com/1.1/";
   /* Set timeout default. */
-  public $timeout = 30;
+  public int $timeout = 30;
   /* Set connect timeout. */
-  public $connecttimeout = 30; 
+  public int $connecttimeout = 30; 
   /* Verify SSL Cert. */
-  public $ssl_verifypeer = FALSE;
+  public bool $ssl_verifypeer = FALSE;
   /* Respons format. */
-  public $format = 'json';
+  public string $format = 'json';
   /* Decode returned json data. */
-  public $decode_json = TRUE;
+  public bool $decode_json = TRUE;
   /* Contains the last HTTP headers returned. */
-  public $http_info;
+  public _ $http_info;
   /* Set the useragnet. */
-  public $useragent = 'TwitterOAuth v0.2.0-beta2';
+  public string $useragent = 'TwitterOAuth v0.2.0-beta2';
   /* Immediately retry the API call if the response was not successful. */
   //public $retry = TRUE;
 
@@ -42,21 +42,21 @@ class TwitterOAuth {
   /**
    * Set API URLS
    */
-  function accessTokenURL()  { return 'https://api.twitter.com/oauth/access_token'; }
-  function authenticateURL() { return 'https://twitter.com/oauth/authenticate'; }
-  function authorizeURL()    { return 'https://twitter.com/oauth/authorize'; }
-  function requestTokenURL() { return 'https://api.twitter.com/oauth/request_token'; }
+  public function accessTokenURL()  { return 'https://api.twitter.com/oauth/access_token'; }
+  public function authenticateURL() { return 'https://twitter.com/oauth/authenticate'; }
+  public function authorizeURL()    { return 'https://twitter.com/oauth/authorize'; }
+  public function requestTokenURL() { return 'https://api.twitter.com/oauth/request_token'; }
 
   /**
    * Debug helpers
    */
-  function lastStatusCode() { return $this->http_status; }
-  function lastAPICall() { return $this->last_api_call; }
+  public function lastStatusCode() { return $this->http_status; }
+  public function lastAPICall() { return $this->last_api_call; }
 
   /**
    * construct TwitterOAuth object
    */
-  function __construct($consumer_key, $consumer_secret, $oauth_token = NULL, $oauth_token_secret = NULL) {
+  public function __construct($consumer_key, $consumer_secret, $oauth_token = NULL, $oauth_token_secret = NULL) {
     $this->sha1_method = new OAuthSignatureMethod_HMAC_SHA1();
     $this->consumer = new OAuthConsumer($consumer_key, $consumer_secret);
     if (!empty($oauth_token) && !empty($oauth_token_secret)) {
@@ -72,7 +72,7 @@ class TwitterOAuth {
    *
    * @returns a key/value array containing oauth_token and oauth_token_secret
    */
-  function getRequestToken($oauth_callback = NULL) {
+  public function getRequestToken($oauth_callback = NULL) {
     $parameters = array();
     if (!empty($oauth_callback)) {
       $parameters['oauth_callback'] = $oauth_callback;
@@ -88,7 +88,7 @@ class TwitterOAuth {
    *
    * @returns a string
    */
-  function getAuthorizeURL($token, $sign_in_with_twitter = TRUE) {
+  public function getAuthorizeURL($token, @bool $sign_in_with_twitter = TRUE) {
     if (is_array($token)) {
       $token = $token['oauth_token'];
     }
@@ -108,7 +108,7 @@ class TwitterOAuth {
    *                "user_id" => "9436992",
    *                "screen_name" => "abraham")
    */
-  function getAccessToken($oauth_verifier = FALSE) {
+  public function getAccessToken(@bool $oauth_verifier = FALSE) {
     $parameters = array();
     if (!empty($oauth_verifier)) {
       $parameters['oauth_verifier'] = $oauth_verifier;
@@ -128,7 +128,7 @@ class TwitterOAuth {
    *                "screen_name" => "abraham",
    *                "x_auth_expires" => "0")
    */  
-  function getXAuthToken($username, $password) {
+  public function getXAuthToken($username, $password) {
     $parameters = array();
     $parameters['x_auth_username'] = $username;
     $parameters['x_auth_password'] = $password;
@@ -142,7 +142,7 @@ class TwitterOAuth {
   /**
    * GET wrapper for oAuthRequest.
    */
-  function get($url, $parameters = array()) {
+  public function get($url, $parameters = array()) {
     $response = $this->oAuthRequest($url, 'GET', $parameters);
     if ($this->format === 'json' && $this->decode_json) {
       return json_decode($response);
@@ -153,7 +153,7 @@ class TwitterOAuth {
   /**
    * POST wrapper for oAuthRequest.
    */
-  function post($url, $parameters = array()) {
+  public function post($url, $parameters = array()) {
     $response = $this->oAuthRequest($url, 'POST', $parameters);
     if ($this->format === 'json' && $this->decode_json) {
       return json_decode($response);
@@ -164,7 +164,7 @@ class TwitterOAuth {
   /**
    * DELETE wrapper for oAuthReqeust.
    */
-  function delete($url, $parameters = array()) {
+  public function delete($url, $parameters = array()) {
     $response = $this->oAuthRequest($url, 'DELETE', $parameters);
     if ($this->format === 'json' && $this->decode_json) {
       return json_decode($response);
@@ -175,7 +175,7 @@ class TwitterOAuth {
   /**
    * Format and sign an OAuth / API request
    */
-  function oAuthRequest($url, $method, $parameters) {
+  public function oAuthRequest($url, $method, $parameters) {
     if (strrpos($url, 'https://') !== 0 && strrpos($url, 'http://') !== 0) {
       $url = "{$this->host}{$url}.{$this->format}";
     }
@@ -194,7 +194,7 @@ class TwitterOAuth {
    *
    * @return API results
    */
-  function http($url, $method, $postfields = NULL) {
+  public function http($url, $method, $postfields = NULL) {
     $this->http_info = array();
     $ci = curl_init();
     /* Curl settings */
@@ -233,7 +233,7 @@ class TwitterOAuth {
   /**
    * Get the header info to store.
    */
-  function getHeader($ch, $header) {
+  public function getHeader($ch, $header) {
     $i = strpos($header, ':');
     if (!empty($i)) {
       $key = str_replace('-', '_', strtolower(substr($header, 0, $i)));

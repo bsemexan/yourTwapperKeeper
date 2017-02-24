@@ -1,4 +1,4 @@
-<?php
+<?hh
 /*
 yourTwapperKeeper - Twitter Archiving Application - http://your.twapperkeeper.com
 Copyright (c) 2010 John O'Brien III - http://www.linkedin.com/in/jobrieniii
@@ -22,12 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 session_start();
 //print_r($_SESSION);
 require_once('config.php');
-require_once('twitteroauth.php'); 
+require_once('twitteroauth.php');
 
 
 // Build OAuth credentials
 $connection = new TwitterOAuth($tk_oauth_consumer_key, $tk_oauth_consumer_secret);
- 
+
 // Get Temporary Credentials
 $request_token = $connection->getRequestToken($tk_your_url.'callback.php');
 
@@ -37,5 +37,3 @@ $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
 
 $url = $connection->getAuthorizeURL($token);
 header('Location: ' . $url);
- 
-?>
