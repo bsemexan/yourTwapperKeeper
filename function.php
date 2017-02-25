@@ -38,7 +38,7 @@ public function sanitize($input) {
     }
 
 // list archives
-public function listArchive($id=false,$keyword=false,$description=false,$tags=false,$screen_name=false,$debug=false) {
+public function listArchive(@bool $id=false,@bool $keyword=false,@bool $description=false,@bool $tags=false,@bool $screen_name=false,@bool $debug=false) {
 	global $db;
 
 	$q = "select * from archives where 1";
@@ -78,7 +78,7 @@ public function listArchive($id=false,$keyword=false,$description=false,$tags=fa
 	}
 
 // create archive
-public function createArchive($keyword,$description,$tags,$screen_name,$user_id,$debug=false) {
+public function createArchive($keyword,$description,$tags,$screen_name,$user_id,@bool $debug=false) {
 	global $db;
 	$q = "select * from archives where keyword = '$keyword'";
 	$r = mysql_query($q, $db->connection);
@@ -132,7 +132,7 @@ public function createArchive($keyword,$description,$tags,$screen_name,$user_id,
 	}
 
 // get tweets
-public function getTweets($id,$start=false,$end=false,$limit=false,$orderby=false,$nort=false,$from_user=false,$text=false,$lang=false,$max_id=false,$since_id=false,$offset=false,$lat=false,$long=false,$rad=false,$debug=false) {
+public function getTweets($id,@bool $start=false,@bool $end=false,@bool $limit=false,@bool $orderby=false,@bool $nort=false,@bool $from_user=false,@bool $text=false,@bool $lang=false,@bool $max_id=false,@bool $since_id=false,@bool $offset=false,@bool $lat=false,@bool $long=false,@bool $rad=false,@bool $debug=false) {
 	global $db;
 
 	$response = array();

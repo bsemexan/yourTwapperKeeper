@@ -8,8 +8,8 @@ class OAuthException extends Exception {
 }
 
 class OAuthConsumer {
-  public $key;
-  public $secret;
+  public _ $key;
+  public _ $secret;
 
   public function __construct($key, $secret, $callback_url=NULL) {
     $this->key = $key;
@@ -24,8 +24,8 @@ class OAuthConsumer {
 
 class OAuthToken {
   // access tokens and request tokens
-  public $key;
-  public $secret;
+  public _ $key;
+  public _ $secret;
 
   /**
    * key = the token
@@ -218,13 +218,13 @@ abstract class OAuthSignatureMethod_RSA_SHA1 extends OAuthSignatureMethod {
 }
 
 class OAuthRequest {
-  private $parameters;
-  private $http_method;
-  private $http_url;
+  private _ $parameters;
+  private _ $http_method;
+  private _ $http_url;
   // for debug purposes
-  public $base_string;
-  public static $version = '1.0';
-  public static $POST_INPUT = 'php://input';
+  public _ $base_string;
+  public static string $version = '1.0';
+  public static string $POST_INPUT = 'php://input';
 
   public function __construct($http_method, $http_url, $parameters=NULL) {
     @$parameters || ($parameters = array());
@@ -303,7 +303,7 @@ class OAuthRequest {
     return new OAuthRequest($http_method, $http_url, $parameters);
   }
 
-  public function set_parameter($name, $value, $allow_duplicates = true) {
+  public function set_parameter($name, $value, @bool $allow_duplicates = true) {
     if ($allow_duplicates && isset($this->parameters[$name])) {
       // We have already added parameter(s) with this name, so add to the list
       if (is_scalar($this->parameters[$name])) {
@@ -479,11 +479,11 @@ class OAuthRequest {
 }
 
 class OAuthServer {
-  protected $timestamp_threshold = 300; // in seconds, five minutes
-  protected $version = '1.0';             // hi blaine
+  protected int $timestamp_threshold = 300; // in seconds, five minutes
+  protected string $version = '1.0';             // hi blaine
   protected $signature_methods = array();
 
-  protected $data_store;
+  protected _ $data_store;
 
   public function __construct($data_store) {
     $this->data_store = $data_store;
@@ -610,7 +610,7 @@ class OAuthServer {
   /**
    * try to find the token for the provided request's token key
    */
-  private function get_token(&$request, $consumer, $token_type="access") {
+  private function get_token(&$request, $consumer, @string $token_type="access") {
     $token_field = @$request->get_parameter('oauth_token');
     $token = $this->data_store->lookup_token(
       $consumer, $token_type, $token_field
@@ -741,7 +741,7 @@ class OAuthUtil {
   // Utility function for turning the Authorization: header into
   // parameters, has to do some unescaping
   // Can filter out any non-oauth parameters if needed (default behaviour)
-  public static function split_header($header, $only_allow_oauth_parameters = true) {
+  public static function split_header($header, @bool $only_allow_oauth_parameters = true) {
     $pattern = '/(([-_a-z]*)=("([^"]*)"|([^,]*)),?)/';
     $offset = 0;
     $params = array();
