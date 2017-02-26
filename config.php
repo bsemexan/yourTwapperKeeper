@@ -45,9 +45,9 @@ $tk_oauth_consumer_secret = 'SECRET';
 
 /* MySQL Database Connection Information */
 define("DB_SERVER", "localhost");										// change to your hostname
-define("DB_USER", "yourdbusername");									// change to your db username
-define("DB_PASS", "TBD");												// change to your db password
-define("DB_NAME", "yourdbname"); 										// change to your db name
+define("DB_USER", "root");									// change to your db username
+define("DB_PASS", "");												// change to your db password
+define("DB_NAME", ""); 										// change to your db name
 
 /* Don't mess with this unless you want to get your hands dirty */
 $yourtwapperkeeper_version = "version 0.6.0";

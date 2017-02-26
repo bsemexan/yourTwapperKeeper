@@ -1,4 +1,4 @@
-<?php
+<?hh
 
 // Load important files
 session_start();
@@ -61,4 +61,3 @@ foreach ($archiveTweets as $key=>$value) {
 }
 
 echo "</table>";
-?>
