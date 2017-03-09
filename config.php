@@ -44,10 +44,10 @@ $tk_oauth_consumer_key = 'KEY';
 $tk_oauth_consumer_secret = 'SECRET';
 
 /* MySQL Database Connection Information */
-define("DB_SERVER", "y0nkiij6humroewt.cbetxkdyhwsb.us-east-1.rds.amazonaws.com");										// change to your hostname
-define("DB_USER", "i4vs40q95amcuhmt");									// change to your db username
-define("DB_PASS", "de0lh58j7qex2fkd");												// change to your db password
-define("DB_NAME", "q6800rdya75og8oy"); 										// change to your db name
+define("DB_SERVER", "");										// change to your hostname
+define("DB_USER", "");									// change to your db username
+define("DB_PASS", "");												// change to your db password
+define("DB_NAME", ""); 										// change to your db name
 
 /* Don't mess with this unless you want to get your hands dirty */
 $yourtwapperkeeper_version = "version 0.6.0";
